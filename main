@@ -1,0 +1,36 @@
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+def desenhar_estrela(img, center_x, center_y, tamanho, rotacao=0):
+    raio_externo = tamanho
+    
+    pontas = 5
+    angulo = 2 * np.pi / pontas
+
+    pontas_estrela = []
+    for i in range(pontas * 2):
+        x = int(center_x + raio_externo * np.cos(i * angulo + np.radians(rotacao)))
+        y = int(center_y + raio_externo * np.sin(i * angulo + np.radians(rotacao)))
+        pontas_estrela.append((x, y))
+
+    for i in range(len(pontas_estrela)):
+        x1, y1 = pontas_estrela[i]
+        x2, y2 = pontas_estrela[(i + 2) % len(pontas_estrela)]
+        cv2.line(img, (x1, y1), (x2, y2), 255, 1)
+
+image = np.zeros((400, 400), dtype=np.uint8)
+
+center_x1, center_y1 = 120, 150
+tamanho_estrela1 = 120
+rotacao_estrela1 = 55
+desenhar_estrela(image, center_x1, center_y1, tamanho_estrela1, rotacao_estrela1)
+
+center_x2, center_y2 = 300, 250
+tamanho_estrela2 = 100
+rotacao_estrela2 = 55
+desenhar_estrela(image, center_x2, center_y2, tamanho_estrela2, rotacao_estrela2)
+
+plt.imshow(image, cmap='gray')
+plt.title('Estrelas Desenhadas com Bresenham')
+plt.show()
